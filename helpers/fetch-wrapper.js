@@ -9,6 +9,7 @@ function get(url) {
     const requestOptions = {
         method: 'GET'
     };
+    console.log(url);
     return fetch(url, requestOptions).then(handleResponse);
 }
 

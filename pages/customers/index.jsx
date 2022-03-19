@@ -63,7 +63,7 @@ function Index() {
                     {customers && !customers.length &&
                         <tr>
                             <td colSpan="4" className="text-center">
-                                <div className="p-2">No Users To Display</div>
+                                <div className="p-2">Nenhum cliente encontrado</div>
                             </td>
                         </tr>
                     }
