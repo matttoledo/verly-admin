@@ -43,11 +43,11 @@ function Index() {
                             <td>{user.address.logradouro} {user.address.localidade} {user.address.complemento} {user.address.bairro} {user.address.cidade}</td>
                             <td>{user.defaulter}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
-                                <Link href={`/customers/edit/${user.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
+                                <Link href={`/customers/edit/${user.id}`} className="btn btn-sm btn-primary mr-1">Editar</Link>
                                 <button onClick={() => deleteUser(user.id)} className="btn btn-sm btn-danger btn-delete-user" disabled={user.isDeleting}>
                                     {user.isDeleting 
                                         ? <span className="spinner-border spinner-border-sm"></span>
-                                        : <span>Delete</span>
+                                        : <span>Deletar</span>
                                     }
                                 </button>
                             </td>
