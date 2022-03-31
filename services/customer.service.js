@@ -6,7 +6,8 @@ export const customerService = {
     getById,
     create,
     update,
-    delete: _delete
+    delete: _delete,
+    getAddressByCep
 };
 
 
@@ -32,4 +33,8 @@ function update(id, params) {
 // prefixed with underscored because delete is a reserved word in javascript
 function _delete(id) {
     return fetchWrapper.delete(`${baseUrl}/${id}`);
+}
+
+function getAddressByCep(cep){
+    return fetchWrapper.get(`https://viacep/.com.br/ws/${cep}`);
 }
