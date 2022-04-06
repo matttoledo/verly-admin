@@ -5,38 +5,41 @@ export const fetchWrapper = {
     delete: _delete
 };
 
-function get(url) {
+async function get(url) {
     const requestOptions = {
         method: 'GET'
     };
-    console.log(url);
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
-function post(url, body) {
+async function post(url, body) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
     };
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
-function put(url, body) {
+async function put(url, body) {
     const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
     };
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-function _delete(url) {
+async function _delete(url) {
     const requestOptions = {
         method: 'DELETE'
     };
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
 // helper functions

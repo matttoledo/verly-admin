@@ -19,6 +19,7 @@ function getAll() {
 }
 
 function getById(id) {
+    debugger
     return fetchWrapper.get(`${baseUrl}/${id}`);
 }
 
@@ -36,5 +37,5 @@ function _delete(id) {
 }
 
 function getAddressByCep(cep){
-    return fetchWrapper.get(`https://viacep/.com.br/ws/${cep}`);
+    return cep?fetchWrapper.get(`https://viacep.com.br/ws/${cep}/json/`):null;
 }

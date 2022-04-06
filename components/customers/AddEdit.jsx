@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import * as Yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+// import * as Yup from "yup";
 import React from "react";
 import InputMask from "react-input-mask";
 
@@ -18,48 +18,41 @@ function AddEdit(props) {
   const isAddMode = !user;
   const router = useRouter();
   // form validation rules
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Nome precisa ser preenchido"),
-    phoneOne: Yup.string().notRequired("Celular precisa ser preencido"),
-    logradouro: Yup.string().notRequired("Logradouro precisa ser preenchido"),
-    complemento: Yup.string().notRequired("Complemento precisa ser preenchido"),
-    bairro: Yup.string().notRequired("Bairro precisa ser preenchido"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // set default form values if user passed in props
-  if (!isAddMode) {
-    const { password, confirmPassword, ...defaultValues } = user;
-    formOptions.defaultValues = defaultValues;
-  }
+  // const validationSchema = Yup.object().shape({
+  //   name: Yup.string().required("Nome precisa ser preenchido"),
+  //   phoneOne: Yup.string().notRequired("Celular precisa ser preencido"),
+  //   logradouro: Yup.string().notRequired("Logradouro precisa ser preenchido"),
+  //   complemento: Yup.string().notRequired("Complemento precisa ser preenchido"),
+  //   bairro: Yup.string().notRequired("Bairro precisa ser preenchido"),
+  // });
+  const formOptions = {};
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { register, setValue, getValues, handleSubmit, reset, formState } = useForm(formOptions);
   const { errors } = formState;
 
   function onSubmit(data) {
-      console.log(data);
+    console.log(data);
     return isAddMode ? createUser(data) : updateUser(user.id, data);
   }
 
-  function onChange(data) {
-    console.log(data.customer.address.cep);
-    return findAddress(data.address.cep);
+  async function findAddress(cep) {
+    const address = await customerService.getAddressByCep(cep.replace("-", ""));
+    setValue('address.logradouro', address.logradouro);
+    setValue('address.complemento', address.complemento);
+    setValue('address.bairro', address.bairro);
+    setValue('address.localidade', address.localidade);
+    return address;
   }
-
-  function findAddress(cep) {
-    return customerService.getAddressByCep(cep);
-  }
-  function createUser(data) {
-    debugger
-    return customerService
-      .create(data)
-      .then(() => {
-        console.log(data);
-        alertService.success("Cliente adicionado", { keepAfterRouteChange: true });
-        router.push(".");
-      })
-      .catch(console.error);
+  async function createUser(data) {
+    try {
+      await customerService
+        .create(data);
+      alertService.success("Cliente adicionado", { keepAfterRouteChange: true });
+      router.push(".");
+    } catch (message_2) {
+      return console.error(message_2);
+    }
   }
 
   function updateUser(id, data) {
@@ -71,7 +64,6 @@ function AddEdit(props) {
       })
       .catch(alertService.error);
   }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>{isAddMode ? "Adicionar Cliente" : "Editar Cliente"}</h1>
@@ -134,7 +126,7 @@ function AddEdit(props) {
               name="cep"
               type="text"
               autoComplete="disabled"
-              onChange={props.onChange}
+              onBlurCapture={() => findAddress(getValues("address.cep"))}
               {...register("address.cep")}
               className={`form-control ${errors.cep ? "is-invalid" : ""}`}
             />
@@ -179,7 +171,7 @@ function AddEdit(props) {
               name="address.cidade"
               type="text"
               autoComplete="disabled"
-              {...register("address.cidade")}
+              {...register("address.localidade")}
               className={`form-control ${errors.cidade ? "is-invalid" : ""}`}
             />
             <div className="invalid-feedback">{errors.cidade?.message}</div>
@@ -202,7 +194,7 @@ function AddEdit(props) {
             disabled={formState.isSubmitting}
             className="btn btn-secondary"
           >
-            Reset
+            Limpar
           </button>
           <Link href="/customers" className="btn btn-link">
             Voltar
