@@ -6,19 +6,19 @@ import { customerService } from '../../services';
 export default Index;
 
 function Index() {
-    const [customers, setUsers] = useState(null);
+    const [customers, setCustomers] = useState(null);
 
     useEffect(() => {
-        customerService.getAll().then(x => setUsers(x));
+        customerService.getAll().then(x => setCustomers(x));
     }, []);
 
     function deleteUser(id) {
-        setUsers(customers.map(x => {
+        setCustomers(customers.map(x => {
             if (x.id === id) { x.isDeleting = true; }
             return x;
         }));
         customerService.delete(id).then(() => {
-            setUsers(customers => customers.filter(x => x.id !== id));
+            setCustomers(customers => customers.filter(x => x.id !== id));
         });
     }
 

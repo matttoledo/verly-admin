@@ -19,7 +19,6 @@ function getAll() {
 }
 
 function getById(id) {
-    debugger
     return fetchWrapper.get(`${baseUrl}/${id}`);
 }
 

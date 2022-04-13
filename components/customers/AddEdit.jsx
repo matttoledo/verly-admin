@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { useForm } from "react-hook-form";
 // import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 // import * as Yup from "yup";
@@ -14,8 +14,8 @@ import { customerService, alertService } from "../../services";
 export { AddEdit };
 
 function AddEdit(props) {
-  const user = props?.user;
-  const isAddMode = !user;
+  const savedCustomer = props?.customer;
+  const isAddMode = props.customer?false:true;
   const router = useRouter();
   // form validation rules
   // const validationSchema = Yup.object().shape({
@@ -30,10 +30,9 @@ function AddEdit(props) {
   // get functions to build form with useForm() hook
   const { register, setValue, getValues, handleSubmit, reset, formState } = useForm(formOptions);
   const { errors } = formState;
-
+  const [customer, setCustomer] = useState({})
   function onSubmit(data) {
-    console.log(data);
-    return isAddMode ? createUser(data) : updateUser(user.id, data);
+    return isAddMode ? createUser(data) : updateUser(savedCustomer.id, data);
   }
 
   async function findAddress(cep) {
@@ -64,6 +63,26 @@ function AddEdit(props) {
       })
       .catch(alertService.error);
   }
+  
+
+  useEffect(() => {
+    if (!isAddMode) {
+        customerService.getById(props.customer.id).then(customer => {
+            setValue('name', customer.name)
+            setValue('cpf',customer.cpf)
+            setValue('address.cep', customer.address.cep)
+            setValue('address.logradouro', customer.address.logradouro)
+            setValue('address.complemento', customer.address.complemento)
+            setValue('address.bairro', customer.address.bairro)
+            setValue('address.localidade', customer.address.local)
+            setValue('phone.one', customer.phone.one)
+            setValue('phone.two', customer.phone.two)
+            setCustomer(customer);
+            console.log('cep', customer.address.cep);
+        });
+    }
+}, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>{isAddMode ? "Adicionar Cliente" : "Editar Cliente"}</h1>
