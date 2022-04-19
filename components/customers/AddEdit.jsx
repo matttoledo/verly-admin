@@ -5,11 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import * as Yup from "yup";
 import React from "react";
 import InputMask from "react-input-mask";
-
-React.useLayoutEffect = React.useEffect;
-
 import { Link } from "../../components";
 import { customerService, alertService } from "../../services";
+
+React.useLayoutEffect = React.useEffect;
 
 export { AddEdit };
 
@@ -19,13 +18,20 @@ function AddEdit(props) {
   const router = useRouter();
   // form validation rules
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Nome precisa ser preenchido"),
-    phoneOne: Yup.string().required("Celular precisa ser preencido"),
-    logradouro: Yup.string().required("Logradouro precisa ser preenchido"),
-    complemento: Yup.string().required("Complemento precisa ser preenchido"),
-    bairro: Yup.string().required("Bairro precisa ser preenchido"),
+    name: Yup.string().required("Nome precisa ser preenchido."),
+    address: Yup.object().shape({
+      logradouro: Yup.string().required("Logradouro precisa ser preenchido.")
+
+    }),
+    phone: Yup.object().shape({
+      one: Yup.string().required("Celular precisa ser preencido."),
+    })
+
+
+    // complemento: Yup.string().required("Complemento precisa ser preenchido."),
+    // bairro: Yup.string().required("Bairro precisa ser preenchido."),
   });
-  const formOptions = {resolver: yupResolver(validationSchema)};
+  const formOptions = { resolver: yupResolver(validationSchema) };
 
   // get functions to build form with useForm() hook
   const { register, setValue, getValues, handleSubmit, reset, formState } = useForm(formOptions);
@@ -50,9 +56,11 @@ function AddEdit(props) {
       data.phone.one = data.phone.one.replace("(", "").replace(")", "").replace("-", "").replace("_", "");
       data.phone.two = data.phone.two.replace("(", "").replace(")", "").replace("-", "").replace("_", "");
       await customerService.create(data);
-      debugger
-      alertService.success("Cliente adicionado", { keepAfterRouteChange: true });
       router.push(".");
+      return data.then(() => {
+        alertService.success("Cliente adicionado", { keepAfterRouteChange: true });
+        router.push(".")
+      })
     } catch (message_2) {
       return console.error(message_2);
     }
@@ -90,7 +98,7 @@ function AddEdit(props) {
     <div className="container border border-dark w-auto bg-light">
       <h2 className="d-flex justify-content-center my-2">{isAddMode ? "Adicionar Cliente" : "Editar Cliente"}</h2>
       <div className="mx-auto h-auto d-inline-block d-flex justify-content-center" style={{ width: '400px', height: '700px' }}>
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="d-flex justify-content-center m h-100">
           <div className="grid">
             <div className="form-row">
@@ -122,13 +130,13 @@ function AddEdit(props) {
                 <label>Celular</label>
                 <InputMask
                   mask="(99)99999-9999"
-                  name="phone.one"
+                  name="phoneOne"
                   type="text"
                   autoComplete="disabled"
                   {...register("phone.one")}
-                  className={`form-control ${errors.phoneOne ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.phone?.one ? "is-invalid" : ""}`}
                 />
-                <div className="invalid-feedback">{errors.phoneOne?.message}</div>
+                <div className="invalid-feedback">{errors.phone?.one?.message}</div>
               </div>
               <div className="form-group">
                 <label>Telefone</label>
@@ -162,16 +170,16 @@ function AddEdit(props) {
                 <input
                   name="address.logradouro"
                   type="text"
-                  autoComplete="disabled"
+                  autoComplete="off"
                   {...register("address.logradouro")}
-                  className={`form-control ${errors.logradouro ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.address?.logradouro ? "is-invalid" : ""}`}
                 />
-                <div className="invalid-feedback">{errors.logradouro?.message}</div>
+                <div className="invalid-feedback">{errors.address?.logradouro?.message}</div>
               </div>
               <div className="form-group">
                 <label>Complemento</label>
                 <input
-                  name="address.complemento"
+                  name="complemento"
                   type="text"
                   autoComplete="disabled"
                   {...register("address.complemento")}
@@ -182,7 +190,7 @@ function AddEdit(props) {
               <div className="form-group">
                 <label>Bairro</label>
                 <input
-                  name="address.bairro"
+                  name="bairro"
                   type="text"
                   autoComplete="disabled"
                   {...register("address.bairro")}

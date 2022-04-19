@@ -29,16 +29,16 @@ function Index() {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th style={{ width: '15%' }}>Nome</th>
-                        <th style={{ width: '15%' }}>Telefone</th>
-                        <th style={{ width: '15%' }}>Endereço</th>
+                        <th style={{ width: '30%' }}>Nome</th>
+                        <th style={{ width: '30%' }}>Telefones</th>
+                        <th style={{ width: '50%' }}>Endereço</th>
                     </tr>
                 </thead>
                 <tbody>
                     {customers && customers.map(user =>
                         <tr key={user.id}>
                             <td>{user.name}</td>
-                            <td>{user.phone.one} {user.phone.two}</td>
+                            <td>{user.phone.one} | {user.phone.two}</td>
                             <td>{user.address.logradouro}, {user.address.complemento}, {user.address.bairro}, {user.address.localidade}.</td>
                             <td>{user.defaulter}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
