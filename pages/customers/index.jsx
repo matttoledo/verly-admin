@@ -32,7 +32,6 @@ function Index() {
                         <th style={{ width: '15%' }}>Nome</th>
                         <th style={{ width: '15%' }}>Telefone</th>
                         <th style={{ width: '15%' }}>Endereço</th>
-                        <th style={{ width: '15%' }}>Inadimplência</th>                        
                     </tr>
                 </thead>
                 <tbody>
@@ -40,7 +39,7 @@ function Index() {
                         <tr key={user.id}>
                             <td>{user.name}</td>
                             <td>{user.phone.one} {user.phone.two}</td>
-                            <td>{user.address.logradouro} {user.address.localidade} {user.address.complemento} {user.address.bairro} {user.address.cidade}</td>
+                            <td>{user.address.logradouro}, {user.address.complemento}, {user.address.bairro}, {user.address.localidade}.</td>
                             <td>{user.defaulter}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
                                 <Link href={`/customers/edit/${user.id}`} className="btn btn-sm btn-primary mr-1">Editar</Link>

@@ -1,8 +1,9 @@
+import AddEdit from "./customers/add";
 
 export default Home;
 
 function Home() {
     return (
-        <h1>Home</h1>
+        <AddEdit></AddEdit>
     );
 }

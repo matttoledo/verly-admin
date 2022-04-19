@@ -36,5 +36,8 @@ function _delete(id) {
 }
 
 function getAddressByCep(cep){
-    return cep?fetchWrapper.get(`https://viacep.com.br/ws/${cep}/json/`):null;
+    if(cep.replace("_","").length == 8){
+        return fetchWrapper.get(`https://viacep.com.br/ws/${cep}/json/`)    
+    }
+    return {}
 }
