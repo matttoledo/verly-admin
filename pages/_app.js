@@ -11,9 +11,9 @@ function MyApp({ Component, pageProps }) {
             <title>Verly Admin</title>
         </Head>
         <Nav />
-        <div className="app-container d-flex justify-content-center">
+        <div className="">
             
-            <div className="container mx-5 my-5 pb-5 d-flex justify-content-center">
+            <div className="mx-4">
                 <Component {...pageProps} />
             </div>
         </div>

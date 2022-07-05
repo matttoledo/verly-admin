@@ -6,11 +6,16 @@ import { customerService } from '../../services';
 export default Index;
 
 function Index() {
-    const [customers, setCustomers] = useState(null);
+    const [customers, setCustomers, searchTerm, setSearchTerm] = useState(null);
+
+   
+
 
     useEffect(() => {
         customerService.getAll().then(x => setCustomers(x));
     }, []);
+
+
 
     function deleteUser(id) {
         setCustomers(customers.map(x => {
@@ -26,6 +31,7 @@ function Index() {
         <div>
             <h1>Clientes</h1>
             <Link href="/customers/add" className="btn btn-sm btn-success mb-2">Adicionar Cliente</Link>
+        
             <table className="table table-striped">
                 <thead>
                     <tr>

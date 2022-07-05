@@ -9,7 +9,6 @@ function Nav() {
                 <NavLink href="/" exact className="nav-item nav-link">Inicio</NavLink>
                 <NavLink href="/customers" className="nav-item nav-link">Clientes</NavLink>
                 <NavLink href="/products" className="nav-item nav-link">Produtos</NavLink>
-
             </div>
         </nav>
     );
